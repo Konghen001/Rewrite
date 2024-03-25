@@ -19,8 +19,8 @@ hostname = newclient.map.baidu.com, yongche.baidu.com, ugc.map.baidu.com
 # 打车页
 //^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/notice url reject-dict
 //^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/activity\/talos\/activitycard\? url reject-dict
-//^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/popup\/getentrancecordovaurl url reject-dict
-//^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/baseinfo url reject-dict
+^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/popup\/getentrancecordovaurl url reject-dict
+^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/baseinfo url reject-dict
 
 # > 百度地图_首页底部推荐
 ^https?:\/\/ugc\.map\.baidu\.com\/govui\/rich_content url reject-200
