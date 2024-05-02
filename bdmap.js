@@ -17,11 +17,23 @@ hostname = newclient.map.baidu.com, yongche.baidu.com, ugc.map.baidu.com
 ^https:\/\/newclient\.map\.baidu\.com\/client\/usersystem\/mine\/page\? url script-response-body https://raw.githubusercontent.com/RuCu6/QuanX/main/Scripts/baidu/map.js
 ^https:\/\/newclient\.map\.baidu\.com\/grow-engine\/api\/common\/userHome\? url reject-dict
 # 打车页
-^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/notice url reject-dict
-^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/activity\/talos\/activitycard\? url reject-dict
-^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/popup\/getentrancecordovaurl url reject-dict
-^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/baseinfo url reject-dict
+//^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/notice url reject-dict
+//^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/activity\/talos\/activitycard\? url reject-dict
+//^https:\/\/yongche\.baidu\.com\/gomarketing\/api\/popup\/getentrancecordovaurl url reject-dict
+//^https:\/\/yongche\.baidu\.com\/goorder\/passenger\/baseinfo url reject-dict
 
 # > 百度地图_首页底部推荐
 ^https?:\/\/ugc\.map\.baidu\.com\/govui\/rich_content url reject-200
 ^https?:\/\/newclient\.map\.baidu\.com\/client\/crossmarketing url reject-200
+
+# > 百度地图_搜索框下足记Tips@ddgksf2013
+;^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui.*qt=rgc url reject-200
+# > 百度地图_搜索推广@ddgksf2013
+^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui.*qt=hw url reject-200
+# > 百度地图_开屏广告|首页左上角广告@ddgksf2013
+^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui2\/\?qt=ads url reject-200
+# > 百度地图_DNS处理@ddgksf2013
+^https?:\/\/httpdns\.baidubce\.com url reject-200
+
+# > 百度地图_我的页面地图动态@ddgksf2013
+^https?:\/\/newclient\.map\.baidu\.com\/client\/usersystem\/home\/dynamic url reject-200
