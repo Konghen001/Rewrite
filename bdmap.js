@@ -1,7 +1,7 @@
 #!name = 百度地图
 #!desc = 移除广告
 
-hostname = newclient.map.baidu.com, yongche.baidu.com, ugc.map.baidu.com
+hostname = newclient.map.baidu.com, httpdns.baidubce.com, ugc.map.baidu.com
 
 
 # 组件包
@@ -30,8 +30,6 @@ hostname = newclient.map.baidu.com, yongche.baidu.com, ugc.map.baidu.com
 ;^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui.*qt=rgc url reject-200
 # > 百度地图_搜索推广@ddgksf2013
 ^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui.*qt=hw url reject-200
-# > 百度地图_开屏广告|首页左上角广告@ddgksf2013
-^https?:\/\/newclient\.map\.baidu\.com\/client\/phpui2\/\?qt=ads url reject-200
 # > 百度地图_DNS处理@ddgksf2013
 ^https?:\/\/httpdns\.baidubce\.com url reject-200
 
