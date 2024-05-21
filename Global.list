@@ -369,7 +369,7 @@ DOMAIN-SUFFIX,steamcommunity.com
 # DOMAIN,store.steampowered.com
 # > Telegram
 #DOMAIN-SUFFIX,legra.ph
-DOMAIN-SUFFIX,t.me
+#DOMAIN-SUFFIX,t.me
 #DOMAIN-SUFFIX,tdesktop.com
 #DOMAIN-SUFFIX,telegra.ph
 #DOMAIN-SUFFIX,telegram.me
