@@ -1,1 +1,12 @@
- 
+ #!name=GenPix 解锁会员
+#!desc=GenPix AI绘图解锁会员功能
+#!author=Yu9191
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Lab.png
+
+[Script]
+http-response ^https:\/\/apiv2\.vivipic\.com\/get-tx-info script-path=https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/genpix.js, requires-body=1, timeout=60, tag=GenPix获取信息
+
+http-request ^https:\/\/apiv2\.vivipic\.com\/gen-image-v3 script-path=https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/genpix.js, requires-body=1, timeout=60, tag=GenPix生成图片
+
+[MITM]
+hostname = apiv2.vivipic.com
