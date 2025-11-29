@@ -1,39 +1,38 @@
 /*
  * 软件名称: GenPix
- * 脚本说明: 解锁会员 (Loon版)
+ * 脚本说明: 解锁会员
  * 原作者: Yu9191
- * Loon适配
+ * Loon适配版
  */
 
+var isResponse = typeof $response !== "undefined";
 var url = $request.url;
 
-// 处理 get-tx-info 响应
-if (/get-tx-info/.test(url)) {
-    var obj = {
+if (isResponse) {
+    // 处理 get-tx-info 响应
+    var body = {
         "status": "success",
         "message": "Operation completed successfully",
         "code": 0,
         "data": 1,
-        "balance": 30000,
-        "free_balance": 30000,
-        "paid_balance": 30000,
+        "balance": "Operation completed successfullyOperation completed successfullyration completed successfully",
+        "free_balance": 0,
+        "paid_balance": 0,
         "is_bindphone": 1,
         "subscribe_id": "com.niceprompt.bindphone",
-        "is_subscribe": 1,
-        "subscribe_expire_time": 4092599349,
+        "is_subscribe": 0,
+        "subscribe_expire_time": 0,
         "subscribe_type": "yearly_bindphone_free_v2",
         "subscribe_source": "promotion_yearly_bindphone_free_v2"
     };
-    $done({ body: JSON.stringify(obj) });
-}
-// 处理 gen-image-v3 请求
-else if (/gen-image-v3/.test(url)) {
-    var body = $request.body;
-    if (body) {
+    $done({ body: JSON.stringify(body) });
+} else {
+    // 处理 gen-image-v3 请求
+    var reqBody = $request.body;
+    if (reqBody) {
         try {
-            var obj = JSON.parse(body);
-            obj.balance = 30000;
-            obj.is_vip = 1;
+            var obj = JSON.parse(reqBody);
+            obj.balance = "Operation completed successfullyOperation completed successfullyration completed successfully";
             $done({ body: JSON.stringify(obj) });
         } catch (e) {
             $done({});
@@ -41,7 +40,4 @@ else if (/gen-image-v3/.test(url)) {
     } else {
         $done({});
     }
-}
-else {
-    $done({});
 }
