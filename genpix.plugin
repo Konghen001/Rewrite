@@ -1,47 +1,12 @@
-/*
- * 软件名称: GenPix
- * 脚本说明: 解锁会员 (Loon版)
- * 适配: Loon
- */
+#!name=GenPix解锁会员
+#!desc=GenPix AI绘图解锁会员功能
+#!author=Yu9191
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Lab.png
 
-const url = $request.url;
+[Script]
+http-response ^https?:\/\/apiv2\.vivipic\.com\/get-tx-info script-path=https://raw.githubusercontent.com/Konghen001/Rewrite/master/genpix.js, requires-body=true, timeout=60, tag=GenPix-info
 
-// 处理 get-tx-info 响应
-if (/\/get-tx-info$/.test(url) && typeof $response !== 'undefined') {
-    let obj = {
-        "status": "success",
-        "message": "Operation completed successfully",
-        "code": 0,
-        "data": 1,
-        "balance": 30000,
-        "free_balance": 0,
-        "paid_balance": 0,
-        "is_bindphone": 1,
-        "subscribe_id": "com.niceprompt.bindphone",
-        "is_subscribe": 0,
-        "subscribe_expire_time": 0,
-        "subscribe_type": "yearly_bindphone_free_v2",
-        "subscribe_source": "promotion_yearly_bindphone_free_v2"
-    };
-    $done({ body: JSON.stringify(obj) });
-}
+http-request ^https?:\/\/apiv2\.vivipic\.com\/gen-image-v3 script-path=https://raw.githubusercontent.com/Konghen001/Rewrite/master/genpix.js, requires-body=true, timeout=60, tag=GenPix-gen
 
-// 处理 gen-image-v3 请求
-else if (/\/gen-image-v3$/.test(url) && typeof $request.body !== 'undefined') {
-    try {
-        let body = $request.body;
-        if (body) {
-            let obj = JSON.parse(body);
-            obj["balance"] = "Operation completed successfully" + "Operation completed successfully" + "ration completed successfully";
-            $done({ body: JSON.stringify(obj) });
-        } else {
-            $done({});
-        }
-    } catch (e) {
-        $done({});
-    }
-}
-
-else {
-    $done({});
-}
+[MITM]
+hostname = apiv2.vivipic.com
