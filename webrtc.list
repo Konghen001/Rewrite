@@ -1,0 +1,10 @@
+# Block WebRTC STUN/TURN
+DOMAIN-KEYWORD,stun
+DOMAIN-SUFFIX,stun.l.google.com
+DOMAIN-SUFFIX,stun1.l.google.com
+DOMAIN-SUFFIX,stun2.l.google.com
+DOMAIN-SUFFIX,stun3.l.google.com
+DOMAIN-SUFFIX,stun4.l.google.com
+DOMAIN-KEYWORD,turn
+DST-PORT,3478
+DST-PORT,19302
