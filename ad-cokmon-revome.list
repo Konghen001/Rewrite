@@ -27,9 +27,9 @@ rules:
   - DOMAIN,api-ad.pinduoduo.com,REJECT
 
   # 腾讯（Tencent）广告屏蔽（包括 QQ、微信、腾讯视频等）
-  - DOMAIN-SUFFIX,qq.com,REJECT  # QQ 广告
-  - DOMAIN-SUFFIX,weixin.qq.com,REJECT  # 微信广告
-  - DOMAIN-SUFFIX,v.qq.com,REJECT  # 腾讯视频广告
+  - DOMAIN-SUFFIX,e.qq.com,REJECT  # QQ 广告
+  #- DOMAIN-SUFFIX,weixin.qq.com,REJECT  # 微信广告
+  #- DOMAIN-SUFFIX,v.qq.com,REJECT  # 腾讯视频广告
   - DOMAIN,adsmind.gdtimg.com,REJECT  # 腾讯广告 mind
   - DOMAIN,info4.video.qq.com,REJECT
   - DOMAIN,info6.video.qq.com,REJECT
