@@ -1,0 +1,55 @@
+rules:
+  # 通用广告屏蔽（基于 AdRules 和 EasyList 适配）
+  - DOMAIN-SUFFIX,ads,REJECT
+  - DOMAIN-SUFFIX,ad,REJECT
+  - DOMAIN-SUFFIX,advert,REJECT
+  - DOMAIN-SUFFIX,googleadservices.com,REJECT
+  - DOMAIN-SUFFIX,doubleclick.net,REJECT
+  - DOMAIN-SUFFIX,googlesyndication.com,REJECT
+  - DOMAIN-SUFFIX,adservice.google.com,REJECT
+  - DOMAIN-SUFFIX,facebook.com,REJECT,no-track  # 屏蔽 Facebook 广告追踪
+  - DOMAIN-SUFFIX,analytics,REJECT  # 通用分析追踪
+
+  # 快手（Kuaishou）广告屏蔽
+  - DOMAIN-SUFFIX,kuaishou.com,REJECT  # 核心域名广告
+  - DOMAIN-SUFFIX,ksapisrv.com,REJECT  # API 广告接口
+  - DOMAIN-SUFFIX,ads.kuaishou.com,REJECT
+  - DOMAIN-SUFFIX,affiliate.kuaishou.com,REJECT
+  - DOMAIN-SUFFIX,beacon.kuaishou.com,REJECT  # 追踪 beacon
+  - DOMAIN,ad.kuaishou.com,REJECT
+
+  # 拼多多（Pinduoduo）广告屏蔽
+  - DOMAIN-SUFFIX,pinduoduo.com,REJECT  # 主域名广告
+  - DOMAIN-SUFFIX,pdd.com,REJECT
+  - DOMAIN-SUFFIX,ads.pinduoduo.com,REJECT
+  - DOMAIN-SUFFIX,affiliate.pinduoduo.com,REJECT
+  - DOMAIN-SUFFIX,analytics.pinduoduo.com,REJECT
+  - DOMAIN,api-ad.pinduoduo.com,REJECT
+
+  # 腾讯（Tencent）广告屏蔽（包括 QQ、微信、腾讯视频等）
+  - DOMAIN-SUFFIX,qq.com,REJECT  # QQ 广告
+  - DOMAIN-SUFFIX,weixin.qq.com,REJECT  # 微信广告
+  - DOMAIN-SUFFIX,v.qq.com,REJECT  # 腾讯视频广告
+  - DOMAIN,adsmind.gdtimg.com,REJECT  # 腾讯广告 mind
+  - DOMAIN,info4.video.qq.com,REJECT
+  - DOMAIN,info6.video.qq.com,REJECT
+  - DOMAIN,ios.video.mpush.qq.com,REJECT  # 推送广告
+  - DOMAIN,otheve.beacon.qq.com,REJECT  # Beacon 追踪
+  - DOMAIN,pgdt.gtimg.cn,REJECT  # 腾讯广点通
+  - DOMAIN-SUFFIX,gdt.qq.com,REJECT  # 广点通广告
+  - DOMAIN-SUFFIX,ads.qq.com,REJECT
+
+  # 其他通用中国平台广告（扩展）
+  - DOMAIN-SUFFIX,baidu.com,REJECT  # 百度广告（如果需要）
+  - DOMAIN-SUFFIX,alibaba.com,REJECT  # 阿里广告
+  - DOMAIN-SUFFIX,bytedance.com,REJECT  # 抖音/头条广告
+  - DOMAIN-SUFFIX,geosite:cn-ads,REJECT  # Stash 内置 GeoSite 中国广告规则（需启用 GeoSite）
+
+# 规则集引用（可选，增强通用性）
+rule-providers:
+  cn-ads:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Cats-Team/AdRules/main/AdRules.yaml"  # 从 GitHub 拉取更新
+    path: ./ruleset/cn-ads.yaml
+    interval: 86400  # 每天更新
