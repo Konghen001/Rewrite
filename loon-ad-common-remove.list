@@ -1,0 +1,74 @@
+# =============================================
+# 中国主流平台广告屏蔽规则（Loon 最新逗号格式）
+# 快手 + 拼多多 + 腾讯系 + 字节 + 阿里 + 百度 等
+# =============================================
+
+# 通用广告关键词（强烈推荐放在最前面）
+DOMAIN-KEYWORD,ads,REJECT
+DOMAIN-KEYWORD,ad_,REJECT
+DOMAIN-KEYWORD,_ad,REJECT
+DOMAIN-KEYWORD,advert,REJECT
+DOMAIN-KEYWORD,beacon,REJECT
+DOMAIN-KEYWORD,analytics,REJECT
+DOMAIN-KEYWORD,track,REJECT
+DOMAIN-KEYWORD,log.,REJECT
+
+# 快手（Kuaishou）广告
+DOMAIN-SUFFIX,ad.kuaishou.com,REJECT
+DOMAIN-SUFFIX,ads.kuaishou.com,REJECT
+DOMAIN-SUFFIX,adserv.kuaishou.com,REJECT
+DOMAIN-SUFFIX,affiliate.kuaishou.com,REJECT
+DOMAIN-SUFFIX,beacon.kuaishou.com,REJECT
+DOMAIN-SUFFIX,ksapisrv.com,REJECT
+DOMAIN-SUFFIX,adapi.kuaishou.com,REJECT
+DOMAIN-SUFFIX,adlive.kuaishou.com,REJECT
+
+# 拼多多（含多多视频、买菜）
+DOMAIN-SUFFIX,ads.pinduoduo.com,REJECT
+DOMAIN-SUFFIX,adlogo.pinduoduo.com,REJECT
+DOMAIN-SUFFIX,api-ad.pinduoduo.com,REJECT
+DOMAIN-SUFFIX,mobilead.yangkeduo.com,REJECT
+DOMAIN-SUFFIX,ad.yangkeduo.com,REJECT
+DOMAIN-SUFFIX,analytics.pinduoduo.com,REJECT
+
+# 腾讯广点通 + 腾讯视频 + 微信 + QQ 广告（最全）
+DOMAIN,adsmind.gdtimg.com,REJECT
+DOMAIN,adsmind.tc.qq.com,REJECT
+DOMAIN,mi.gdt.qq.com,REJECT
+DOMAIN,pgdt.gtimg.cn,REJECT
+DOMAIN,pgdt.ugdtimg.com,REJECT
+DOMAIN-SUFFIX,gdt.qq.com,REJECT
+DOMAIN-SUFFIX,gdtimg.com,REJECT
+DOMAIN,otheve.beacon.qq.com,REJECT
+DOMAIN,oth.eve.mdt.qq.com,REJECT
+DOMAIN,info4.video.qq.com,REJECT
+DOMAIN,info6.video.qq.com,REJECT
+DOMAIN,ios.video.mpush.qq.com,REJECT
+DOMAIN-SUFFIX,ads.qq.com,REJECT
+
+# 微信朋友圈、小程序、视频号广告
+DOMAIN-SUFFIX,ad.wx.qq.com,REJECT
+DOMAIN-SUFFIX,finder.video.qq.com,REJECT
+
+# 字节跳动（抖音、头条、西瓜等）
+DOMAIN-SUFFIX,pangolin.snssdk.com,REJECT
+DOMAIN-SUFFIX,is.snssdk.com,REJECT
+DOMAIN-SUFFIX,ad.toutiao.com,REJECT
+DOMAIN-SUFFIX,adx.toutiao.com,REJECT
+DOMAIN-SUFFIX,ad.bytego.com,REJECT
+
+# 阿里系（淘宝、天猫、优酷等）
+DOMAIN-SUFFIX,afp.alicdn.com,REJECT
+DOMAIN-SUFFIX,tanx.com,REJECT
+DOMAIN-SUFFIX,adashbc.ut.taobao.com,REJECT
+
+# 百度系
+DOMAIN-SUFFIX,hm.baidu.com,REJECT
+DOMAIN-SUFFIX,cpro.baidu.com,REJECT
+DOMAIN-SUFFIX,union.baidu.com,REJECT
+
+# 其他常见广告联盟
+DOMAIN-SUFFIX,miidi.net,REJECT
+DOMAIN-SUFFIX,duomeng.cn,REJECT
+DOMAIN-SUFFIX,vungle.com,REJECT
+DOMAIN-SUFFIX,unityads.unity3d.com,REJECT
