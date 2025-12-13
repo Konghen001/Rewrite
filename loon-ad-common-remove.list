@@ -13,6 +13,12 @@ DOMAIN-KEYWORD,beacon,REJECT
 DOMAIN-KEYWORD,analytics,REJECT
 DOMAIN-KEYWORD,track,REJECT
 DOMAIN-KEYWORD,log.,REJECT
+DOMAIN-SUFFIX,googleadservices.com,REJECT
+DOMAIN-SUFFIX,doubleclick.net,REJECT
+DOMAIN-SUFFIX,googlesyndication.com,REJECT
+DOMAIN-SUFFIX,adservice.google.com,REJECT
+DOMAIN-SUFFIX,facebook.com,REJECT,no-track  # 屏蔽 Facebook 广告追踪
+DOMAIN-SUFFIX,analytics,REJECT
 
 # 快手（Kuaishou）广告
 DOMAIN-SUFFIX,ad.kuaishou.com,REJECT
