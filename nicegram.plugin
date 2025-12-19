@@ -1,0 +1,18 @@
+#!name=Nicegram Premium
+#!desc=解锁 Nicegram Premium 功能 & 修改虚拟币
+#!author=he2o
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png
+
+[Argument]
+attPoints = input, tag=积分数量, default=9999
+gems = input, tag=宝石数量, default=9999
+
+[Rule]
+DOMAIN-SUFFIX, adsgram.me, REJECT
+DOMAIN-SUFFIX, adsgram.ai, REJECT
+
+[Script]
+http-response ^https?:\/\/nicegram\.cloud\/api\/v\d+\/(ai-assistant\/purchase-list|telegram\/auth|user\/info|unblock-feature|adsgram\/get-banner|att\/scroll-to-earn\/user-info|att\/scroll-to-earn\/config|att\/scroll-to-earn\/ads-list|airdrop\/task-list) script-path=https://he2o.vercel.app/Resource/Plugin/Nicegram.js, requires-body=true, timeout=60, tag=Nicegram Premium, argument=[{attPoints},{gems}]
+
+[MITM]
+hostname = nicegram.cloud
