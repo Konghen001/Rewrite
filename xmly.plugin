@@ -1,37 +1,25 @@
-#!name=喜马拉雅 VIP & 去广告 (终极兼容版)
-#!desc=修复VIP标识、小雅提示音、自动跳集及去广告。包含全量 IP 拦截列表以应对 IP 直连请求。
+#!name=喜马拉雅 VIP & 去广告 (最终调试版)
+#!desc=强制拦截所有 IP 直连，并清除小雅语音资源。
 #!author=WeiGiegie & Fix
-#!icon=https://raw.githubusercontent.com/Orz-3/mini/master/Color/ximalaya.png
 
 [General]
-# 将 QX 脚本中的所有关键 IP 段加入强制 HTTP 引擎，确保 IP 直连也能被解析
-force-http-engine-hosts = %APPEND% *.ximalaya.com, *.xmcdn.com, *.himalaya.com, 180.153.*, 114.80.*, 36.150.*, 61.172.*, 101.91.*, 203.205.*, 43.152.*, 43.132.*, 101.33.*, 43.175.*, 150.109.*, 150.138.*, 61.170.*, 42.56.*, 120.232.*, 43.159.*, 117.34.*, 36.103.*, 118.180.*, 49.119.*, 58.144.*, 58.251.*, 221.204.*, 112.84.*, 112.80.*, 112.98.*, 112.99.*, 116.136.*, 116.162.*, 116.177.*, 123.138.*, 183.204.*, 183.201.*, 61.164.*, 106.41.*, 118.25.*, 223.111.*
+# 强制将所有喜马拉雅相关 IP 进入 HTTP 引擎进行解密
+force-http-engine-hosts = *ximalaya.com, *xmcdn.com, 180.153.*, 36.150.*, 114.80.*, 101.91.*, 43.152.*, 150.109.*, 43.175.*, 101.33.*
 
 [Rewrite]
-# --- 去广告部分 (同步自 a.js) ---
-# 友邻/横幅广告
-^https?:\/\/passport\.ximalaya\.com\/friendship-mobile\/v\d\/findFriendsBanner\/show\/ reject
-# 实时数据收集/统计
-^https?:\/\/xdcs-collector\.ximalaya\.com\/api\/v\d\/realtime reject
-# 广告服务商域名
-^https?:\/\/adse\.wsa\.ximalaya\.com reject
-^https?:\/\/adse\.ximalaya\.com reject
-^https?:\/\/ad\.ximalaya\.com reject
-# 友盟统计
-^https?:\/\/ulogs\.umeng\.com\/unify_logs reject
-# 签到/促销价格提示 (reject-dict 模拟 QX 的 reject-200)
-^https?:\/\/.*ximalaya\.com\/x-web-activity\/signIn\/getHomePageSignInInfo\/ reject-dict
-^https?:\/\/.*ximalaya\.com\/product\/promotion\/v\d\/album\/price reject-dict
-# 底部弹出会员购买页面/促销导流
-^https?:\/\/.*\/business-sale-promotion-guide-mobile-web\/popup\/info\/ reject
+# 彻底拦截所有广告、推广及小雅语音资源
+^https?:\/\/.*\/business-sale-promotion-guide-mobile-web\/popup\/info\/ reject-dict
+^https?:\/\/.*\/product\/promotion\/v\d\/album\/price reject-dict
+^https?:\/\/.*\/x-web-activity\/signIn\/getHomePageSignInInfo\/ reject-dict
+^https?:\/\/.*\/friendship-mobile\/v\d\/findFriendsBanner\/show\/ reject
+^https?:\/\/.*\/realtime\/.*(guide|warning|trial|audio_ad|voice_ad).* reject-dict
+^https?:\/\/adse.*\.ximalaya\.com\/.* reject
+^https?:\/\/ad\.ximalaya\.com\/.* reject
 
 [Script]
-# --- VIP 解锁部分 ---
-# 【关键改进】修改正则以匹配 IP 直连情况，同时覆盖 a.js 中提到的所有版本路径 (v1/v2/v4)
-# 匹配：个人中心、详情页、音轨详情、播放页信息(baseInfo/ts)、下载、播放器装饰等
-http-response ^https?:\/\/.*?\/(mobile-user\/v\d\/homePage|product\/detail\/v\d|v\d\/album\/track\/ts|mobile-playpage\/track\/v\d\/baseInfo\/ts|mobile-playpage\/playpage\/tabs\/v\d|mobile-playpage\/playpage\/track\/qualityAndEffect|mobile\/download\/v\d\/track|mobile-user-grade\/decoratorV\d\/decorationDetails\/page|mobile-album\/album\/plant\/grass) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅VIP解锁
+# 强制使用通用匹配，确保无论通过哪个 IP 访问，都调用脚本
+http-response ^https?:\/\/.+(mobile-user\/v\d\/homePage|baseInfo\/ts|tabs\/v\d|qualityAndEffect|decorationDetails\/page) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅解锁
 
 [Mitm]
-# 将 QX 中所有提到的 IP 和域名全部加入 MitM 列表
-# 注：Loon 对 IP 通配符支持有限，但此处按要求全部列入以求最大兼容
-hostname = *.ximalaya.com, *.xmcdn.com, *.himalaya.com, mobwsa.ximalaya.com, mobile.ximalaya.com, apisg.himalaya.com, passport.ximalaya.com, m.ximalaya.com, adse.ximalaya.com, ulogs.umeng.com, 180.153.*, 114.80.*, 36.150.*, 61.172.*, 101.91.*, 203.205.*, 43.152.*, 43.132.*, 101.33.*, 61.170.*, 42.56.*, 120.232.*, 117.34.*, 36.103.*, 118.180.*, 49.119.*, 58.144.*, 58.251.*, 221.204.*, 112.84.*, 112.98.*, 116.136.*, 123.138.*, 183.204.*
+# 必须包含这些域名，配合 Host 段的映射，实现强制 MitM
+hostname = *.ximalaya.com, *.xmcdn.com, mobwsa.ximalaya.com
