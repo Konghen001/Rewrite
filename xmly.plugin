@@ -1,0 +1,29 @@
+#!name=喜马拉雅 VIP 解锁 & 去广告
+#!desc=喜马拉雅+会员解锁+大师课+音质/音效/下载/播放器皮肤。由 WeiGiegie 开发，Loon 完美优化版。
+#!author=WeiGiegie
+#!icon=https://raw.githubusercontent.com/Orz-3/mini/master/Color/ximalaya.png
+#!date=2024-03-04
+
+[Rewrite]
+# --- 去广告部分 ---
+^https?://passport\.ximalaya\.com/friendship-mobile/v1/findFriendsBanner/show/ reject
+^https?://xdcs-collector\.ximalaya\.com/api/v1/realtime reject
+^https?://adse\.wsa\.ximalaya\.com reject
+^https?://adse\.ximalaya\.com reject
+^https?://ad\.ximalaya\.com reject
+^https?://ulogs\.umeng\.com\/unify_logs reject
+^https?://mobile\.ximalaya\.com/business-sale-promotion-guide-mobile-web/popup/info/ reject
+
+# --- 拦截特定页面（Loon 优化：使用 reject-dict 返回空 JSON 避免报错） ---
+^https?://.+ximalaya\.com/x-web-activity/signIn/getHomePageSignInInfo/ reject-dict
+^https?://.+ximalaya\.com/product/promotion/v1/album/price reject-dict
+
+[Script]
+# --- 核心解锁逻辑 ---
+# 注意：requires-body=true 是必须的，Loon 需要声明此项才能处理响应体
+http-response ^https?:\/\/.+((ximalaya)|(xmcdn)).+(mobile-user\/v2\/homePage|product\/detail\/v1|v1\/album\/track\/ts|mobile-playpage\/track\/v4\/baseInfo\/ts|mobile-playpage\/playpage\/tabs\/v2|mobile-playpage\/playpage\/track\/qualityAndEffect|mobile\/download\/v2\/track|mobile-user-grade\/decoratorV2\/decorationDetails\/page|mobile-album\/album\/plant\/grass) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅解锁
+
+[Mitm]
+# --- 域名解密 ---
+# 移除了原脚本中无效的 IP 通配符（Loon 不支持），仅保留核心业务域名
+hostname = *.ximalaya.com, *.xmcdn.com, apisg.himalaya.com, adse.ximalaya.com, passport.ximalaya.com, m.ximalaya.com, ulogs.umeng.com, www.taobao.com
