@@ -5,7 +5,7 @@
 
 [General]
 # 强制对喜马拉雅相关的 IP 流量进行域名解析拦截
-force-http-engine-hosts = %APPEND% *.ximalaya.com, *.xmcdn.com, *.himalaya.com
+force-http-engine-hosts = %APPEND% *.ximalaya.com, *.xmcdn.com, *.himalaya.com, mobwsa.ximalaya.com, mobile.ximalaya.com
 
 [Rewrite]
 # --- 针对“语音提示”的精准打击 ---
@@ -31,3 +31,4 @@ http-response ^https?:\/\/.*((ximalaya)|(xmcdn)|(himalaya)).*\/((mobile-user\/v\
 # --- 关键：Loon 必须使用通配符域名来覆盖 IP 请求 ---
 # 移除了所有无效的 IP 段，改用更强大的泛域名通配
 hostname = *.ximalaya.com, *.xmcdn.com, *.himalaya.com, apisg.himalaya.com, adse.ximalaya.com, passport.ximalaya.com, m.ximalaya.com, ulogs.umeng.com
+
