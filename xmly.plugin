@@ -1,13 +1,12 @@
-#!name=喜马拉雅 VIP & 去广告 (最终调试版)
-#!desc=强制拦截所有 IP 直连，并清除小雅语音资源。
-#!author=WeiGiegie & Fix
+#!name=喜马拉雅 VIP 解锁 & 去广告 (Loon版)
+#!desc=解锁VIP、移除语音提示、去广告。基于原QX脚本适配Loon，支持我的页面显示VIP和无语音提示。
+#!author=基于WeiGiegie脚本适配
+#!date=2026-03-10
 
 [General]
-# 强制将所有喜马拉雅相关 IP 进入 HTTP 引擎进行解密
 force-http-engine-hosts = *ximalaya.com, *xmcdn.com, 180.153.*, 36.150.*, 114.80.*, 101.91.*, 43.152.*, 150.109.*, 43.175.*, 101.33.*
 
 [Rewrite]
-# 彻底拦截所有广告、推广及小雅语音资源
 ^https?:\/\/.*\/business-sale-promotion-guide-mobile-web\/popup\/info\/ reject-dict
 ^https?:\/\/.*\/product\/promotion\/v\d\/album\/price reject-dict
 ^https?:\/\/.*\/x-web-activity\/signIn\/getHomePageSignInInfo\/ reject-dict
@@ -15,11 +14,11 @@ force-http-engine-hosts = *ximalaya.com, *xmcdn.com, 180.153.*, 36.150.*, 114.80
 ^https?:\/\/.*\/realtime\/.*(guide|warning|trial|audio_ad|voice_ad).* reject-dict
 ^https?:\/\/adse.*\.ximalaya\.com\/.* reject
 ^https?:\/\/ad\.ximalaya\.com\/.* reject
+^https?:\/\/xdcs-collector\.ximalaya\.com\/api\/v1\/realtime reject
+^https?:\/\/ulogs\.umeng\.com\/unify_logs reject
 
 [Script]
-# 强制使用通用匹配，确保无论通过哪个 IP 访问，都调用脚本
-http-response ^https?:\/\/.+(mobile-user\/v\d\/homePage|baseInfo\/ts|tabs\/v\d|qualityAndEffect|decorationDetails\/page) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅解锁
+http-response ^https?:\/\/.+((ximalaya)|(xmcdn)).+(mobile-user\/v2\/homePage|product\/detail\/v1|v1\/album\/track\/ts|mobile-playpage\/track\/v4\/baseInfo\/ts|mobile-playpage\/playpage\/tabs\/v2|mobile-playpage\/playpage\/track\/qualityAndEffect|mobile\/download\/v2\/track|mobile-user-grade\/decoratorV2\/decorationDetails\/page|mobile-album\/album\/plant\/grass), requires-body=true, max-size=0, timeout=60, script-path=./xmly.js, tag=喜马拉雅VIP解锁 (Loon)
 
 [Mitm]
-# 必须包含这些域名，配合 Host 段的映射，实现强制 MitM
-hostname = *.ximalaya.com, *.xmcdn.com, mobwsa.ximalaya.com
+hostname = *.ximalaya.com, *.xmcdn.com, mobwsa.ximalaya.com, passport.ximalaya.com, adse.ximalaya.com, xdcs-collector.ximalaya.com, ulogs.umeng.com
