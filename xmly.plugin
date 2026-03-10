@@ -1,27 +1,33 @@
-#!name=喜马拉雅 VIP 增强修复版
-#!desc=修复会员图标显示、消除“试听即将结束”语音提示、解锁全部 VIP 功能。
-#!author=WeiGiegie (Adapted for Loon)
+#!name=喜马拉雅 VIP 终极修复版 (Loon)
+#!desc=1.修复会员图标不显示问题 2.彻底根除“试听即将结束”语音 3.优化 IP 直连拦截逻辑。
+#!author=WeiGiegie
 #!icon=https://raw.githubusercontent.com/Orz-3/mini/master/Color/ximalaya.png
 
-[Rewrite]
-# --- 1. 消除“试听结束”语音的关键：屏蔽购买引导和促销弹窗 ---
-^https?://mobile\.ximalaya\.com/business-sale-promotion-guide-mobile-web/popup/info/ reject-dict
-^https?://.+ximalaya\.com/product/promotion/v1/album/price reject-dict
-^https?://.+ximalaya\.com/x-web-activity/signIn/getHomePageSignInInfo/ reject-dict
+[General]
+# 强制对喜马拉雅相关的 IP 流量进行域名解析拦截
+force-http-engine-hosts = %APPEND% *.ximalaya.com, *.xmcdn.com, *.himalaya.com
 
-# --- 2. 去广告（保持开启，防止广告干扰） ---
-^https?://passport\.ximalaya\.com/friendship-mobile/v1/findFriendsBanner/show/ reject
-^https?://xdcs-collector\.ximalaya\.com/api/v1/realtime reject
-^https?://adse\.wsa\.ximalaya\.com reject
-^https?://adse\.ximalaya\.com reject
-^https?://ad\.ximalaya\.com reject
-^https?://ulogs\.umeng\.com\/unify_logs reject
+[Rewrite]
+# --- 针对“语音提示”的精准打击 ---
+# 1. 拦截促销弹窗和引导（使用 reject-dict 返回空 JSON，防止触发语音）
+^https?:\/\/mobile\.ximalaya\.com\/business-sale-promotion-guide-mobile-web\/popup\/info\/ reject-dict
+^https?:\/\/.*ximalaya\.com\/product\/promotion\/v\d\/album\/price reject-dict
+# 2. 屏蔽可能存在的语音包下载
+^https?:\/\/.*\.xmcdn\.com\/.*\/audio\/.*(guide|warning|trial).* reject
+
+# --- 去广告部分 ---
+^https?:\/\/passport\.ximalaya\.com\/friendship-mobile\/v1\/findFriendsBanner\/show\/ reject
+^https?:\/\/xdcs-collector\.ximalaya\.com\/api\/v1\/realtime reject
+^https?:\/\/adse\.wsa\.ximalaya\.com reject
+^https?:\/\/adse\.ximalaya\.com reject
+^https?:\/\/ad\.ximalaya\.com reject
 
 [Script]
-# --- 3. 核心解锁逻辑 (增加匹配范围，确保覆盖个人中心) ---
-# 增加了对 mobile-user-grade (等级/图标) 的增强匹配
-http-response ^https?:\/\/.+((ximalaya)|(xmcdn)).+(mobile-user\/v\d\/homePage|product\/detail\/v\d|v\d\/album\/track\/ts|mobile-playpage\/track\/v\d\/baseInfo\/ts|mobile-playpage\/playpage\/tabs\/v\d|mobile-playpage\/playpage\/track\/qualityAndEffect|mobile\/download\/v\d\/track|mobile-user-grade|mobile-album\/album\/plant\/grass) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅解锁
+# --- 核心解锁逻辑 (改用更宽泛的正则，确保覆盖 IP 访问情况) ---
+# 增加了对 mobile-user (个人中心) 和 playpage (播放逻辑) 的强制捕获
+http-response ^https?:\/\/.*((ximalaya)|(xmcdn)|(himalaya)).*\/((mobile-user\/v\d\/homePage)|(product\/detail\/v\d)|(v\d\/album\/track\/ts)|(mobile-playpage\/track\/v\d\/baseInfo\/ts)|(mobile-playpage\/playpage\/tabs\/v\d)|(mobile-playpage\/playpage\/track\/qualityAndEffect)|(mobile\/download\/v\d\/track)) script-path=https://raw.githubusercontent.com/WeiGiegie/666/main/ximalaya.js, requires-body=true, timeout=60, tag=喜马拉雅解锁
 
 [Mitm]
-# --- 4. 增强型域名拦截 (Loon 不支持 IP 段通配符，所以我们要列全关键域名) ---
-hostname = mobile.ximalaya.com, mobwsa.ximalaya.com, apisg.himalaya.com, adse.ximalaya.com, passport.ximalaya.com, m.ximalaya.com, *.ximalaya.com, *.xmcdn.com, ulogs.umeng.com
+# --- 关键：Loon 必须使用通配符域名来覆盖 IP 请求 ---
+# 移除了所有无效的 IP 段，改用更强大的泛域名通配
+hostname = *.ximalaya.com, *.xmcdn.com, *.himalaya.com, apisg.himalaya.com, adse.ximalaya.com, passport.ximalaya.com, m.ximalaya.com, ulogs.umeng.com
