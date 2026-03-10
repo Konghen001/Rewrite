@@ -21,5 +21,6 @@ force-http-engine-hosts = *ximalaya.com, *xmcdn.com, 180.153.*, 36.150.*, 114.80
 http-response ^https?:\/\/.+((ximalaya)|(xmcdn)).+(mobile-user\/v2\/homePage|product\/detail\/v1|v1\/album\/track\/ts|mobile-playpage\/track\/v4\/baseInfo\/ts|mobile-playpage\/playpage\/tabs\/v2|mobile-playpage\/playpage\/track\/qualityAndEffect|mobile\/download\/v2\/track|mobile-user-grade\/decoratorV2\/decorationDetails\/page|mobile-album\/album\/plant\/grass), requires-body=true, max-size=0, timeout=60, script-path=https://raw.githubusercontent.com/Konghen001/Rewrite/refs/heads/main/xmly.js, tag=喜马拉雅VIP解锁 (Loon)
 
 [Mitm]
-hostname = *.ximalaya.com, *.xmcdn.com, mobwsa.ximalaya.com, passport.ximalaya.com, adse.ximalaya.com, xdcs-collector.ximalaya.com, ulogs.umeng.com
+hostname = *.ximalaya.com, *.xmcdn.com, mobwsa.ximalaya.com, passport.ximalaya.com, adse.ximalaya.com, xdcs-collector.ximalaya.com
+
 
