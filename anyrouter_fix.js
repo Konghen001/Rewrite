@@ -11,7 +11,12 @@ console.log("[Anyrouter-Fix] 正在拦截请求进行 1M 上下文强修...");
 
 // 1. 清理干扰 Header
 if (headers['anthropic-beta']) delete headers['anthropic-beta'];
-
+if (headers['max-context']) {
+    headers['max-context'] = '1M';
+}
+if (headers['X-Max-Context']) {
+    headers['X-Max-Context'] = '1M';
+}
 // 2. 核心：强行修改 Body 中的 max_tokens
 if (body) {
     try {
@@ -22,7 +27,11 @@ if (body) {
 
         // 【核心修改点】不管客户端传过来的是 32000 还是多少，一律强行覆盖为 1,000,000
         // 如果网关要的是纯数字 1M，这就直接对齐了
-        obj.max_tokens = 1000000; 
+        obj.max_tokens = “1M”; 
+        obj.metadata.max_tokens = "1M";
+        obj.options.max_tokens = "1M";  
+
+
 
         // 备用方案：如果网关设计奇葩非要字符串 "1M"，可以把上面那行加双引号，即：obj.max_tokens = "1M";
         
