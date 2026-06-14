@@ -1,59 +1,59 @@
 /*
- * Anyrouter Context & Beta-Header Fix Script for Egern & Surge
+ * Anyrouter Content-Type & Body Clean Script
  */
 
 let url = $request.url;
 let headers = $request.headers;
 let body = $request.body;
 
-console.log("[Anyrouter-Fix] 正在拦截请求: " + url);
+console.log("[Anyrouter-Fix] 拦截到请求，当前 Body 长度: " + (body ? body.length : 0));
 
-// ==================== 核心修复 1: 移除/修改可能导致中转站报错的 anthropic-beta 头 ====================
-if (headers['anthropic-beta']) {
-    console.log("[Anyrouter-Fix] 检测到 anthropic-beta: " + headers['anthropic-beta'] + "，正在尝试将其移除以兼容中转站。");
-    // 方案 A: 直接删除该请求头（推荐，让中转网关当成普通模型请求处理）
-    delete headers['anthropic-beta'];
-    
-    // 方案 B: 如果删了还不行，可以取消下面这行的注释，尝试将其改写为中转站更常兼容的原始 max-tokens 声明
-    // headers['anthropic-beta'] = 'max-tokens-32k-welcomed-2024-01-09';
-}
+// 1. 彻底清理干扰 Header
+if (headers['anthropic-beta']) delete headers['anthropic-beta'];
+if (headers['max-context']) delete headers['max-context'];
+if (headers['X-Max-Context']) delete headers['X-Max-Context'];
 
-// 2. 预防性处理：拦截并篡改可能存在的自定义请求头 (Headers)
-if (headers['max-context']) {
-    headers['max-context'] = '1M';
-}
-if (headers['X-Max-Context']) {
-    headers['X-Max-Context'] = '1M';
-}
-
-// ==================== 核心修复 2: 拦截并篡改请求体 (Body) ====================
+// 2. 深入解析并清洗加密/庞大的 Body
 if (body) {
     try {
         let obj = JSON.parse(body);
+        
+        // 【关键调试】：在日志中打印整个请求体，方便在 Egern 的文本日志里查看 OpenMinis 到底发了什么
+        console.log("[Anyrouter-Fix] 原始 Body 内容: " + JSON.stringify(obj));
+
         let changed = false;
 
-        // 如果 OpenMinis 里设置了数字 1000000
-        if (obj.max_tokens === 1000000 || obj.max_tokens === '1000000') {
+        // 强行检查并规范化 max_tokens 字段
+        if (obj.max_tokens) {
+            console.log("[Anyrouter-Fix] 发现原始 max_tokens 为: " + obj.max_tokens);
+            // 无论客户端发的是 1000000 还是 4096，直接强行改成中转网关想要的字符串 "1M"
             obj.max_tokens = "1M";
             changed = true;
-            console.log("[Anyrouter-Fix] 成功捕获数字 1000000，已篡改为字符串 '1M'");
+        } else {
+            // 如果客户端根本没发 max_tokens，网关可能因此报错，我们帮它补上
+            obj.max_tokens = "1M";
+            changed = true;
         }
 
-        // 兼容处理可能携带在 metadata 或 options 里的参数
-        if (obj.metadata && (obj.metadata.max_tokens === 1000000 || obj.metadata.max_tokens === '1000000')) {
-            obj.metadata.max_tokens = "1M";
-            changed = true;
-        }
-        if (obj.options && (obj.options.max_tokens === 1000000 || obj.options.max_tokens === '1000000')) {
-            obj.options.max_tokens = "1M";
-            changed = true;
+        // 【安全清洗】：删除 OpenMinis 可能自带的、会导致中转站网关解析崩溃的自定义非标准字段
+        // 比如某些客户端会自带 options, extra, client_info 等
+        const allowedKeys = ['model', 'messages', 'max_tokens', 'system', 'stream', 'temperature', 'top_p', 'top_k', 'tools', 'tool_choice', 'thinking'];
+        
+        for (let key in obj) {
+            if (!allowedKeys.includes(key)) {
+                console.log("[Anyrouter-Fix] 正在移除客户端私货字段: " + key);
+                delete obj[key];
+                changed = true;
+            }
         }
 
         if (changed) {
             body = JSON.stringify(obj);
+            // 重新计算并更新 content-length，防止因长度不符引发 400 错误
+            headers['content-length'] = String(body.length); 
         }
     } catch (e) {
-        console.log("[Anyrouter-Fix] 解析 JSON Body 失败: " + e);
+        console.log("[Anyrouter-Fix] JSON 解析失败: " + e);
     }
 }
 
