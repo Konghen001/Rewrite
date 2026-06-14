@@ -27,7 +27,7 @@ if (body) {
 
         // 【核心修改点】不管客户端传过来的是 32000 还是多少，一律强行覆盖为 1,000,000
         // 如果网关要的是纯数字 1M，这就直接对齐了
-        obj.max_tokens = “1M”; 
+        obj.max_tokens = 1000000; 
         obj.metadata.max_tokens = "1M";
         obj.options.max_tokens = "1M";  
 
