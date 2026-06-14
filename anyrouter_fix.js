@@ -1,55 +1,49 @@
-/*
- * Anyrouter Max_Tokens 1M Hard-Fix Script
- * 适用客户端：OpenMinis / 适用中转站：Anyrouter.top
- */
+export default async function(ctx) {
+  // 只处理发往 anyrouter 的请求
+  if (!ctx.request.url.includes("anyrouter.top")) return;
 
-let url = $request.url;
-let headers = $request.headers;
-let body = $request.body;
+  // 读取原始 body
+  const body = await ctx.request.json();
 
-console.log("[Anyrouter-Fix] 正在拦截请求进行 1M 上下文强修...");
-
-// 1. 清理干扰 Header
-if (headers['anthropic-beta']) delete headers['anthropic-beta'];
-if (headers['max-context']) {
-    headers['max-context'] = '1M';
-}
-if (headers['X-Max-Context']) {
-    headers['X-Max-Context'] = '1M';
-}
-// 2. 核心：强行修改 Body 中的 max_tokens
-if (body) {
-    try {
-        let obj = JSON.parse(body);
-        
-        // 打印修改前的值
-        console.log("[Anyrouter-Fix] 原始 max_tokens 值为: " + obj.max_tokens);
-
-        // 【核心修改点】不管客户端传过来的是 32000 还是多少，一律强行覆盖为 1,000,000
-        // 如果网关要的是纯数字 1M，这就直接对齐了
-        obj.max_tokens = 1000000; 
-        obj.metadata.max_tokens = "1M";
-        obj.options.max_tokens = "1M";  
-
-
-
-        // 备用方案：如果网关设计奇葩非要字符串 "1M"，可以把上面那行加双引号，即：obj.max_tokens = "1M";
-        
-        // 顺便规范清理 OpenMinis 夹带的、可能干扰网关的客户端专属参数
-        if (obj.output_config) {
-            console.log("[Anyrouter-Fix] 移除非标参数 output_config");
-            delete obj.output_config;
-        }
-
-        body = JSON.stringify(obj);
-        
-        // 重新计算内容长度，防止 400 错误
-        headers['content-length'] = String(body.length);
-        console.log("[Anyrouter-Fix] Body 强修成功，新 max_tokens: " + obj.max_tokens + ", 新长度: " + headers['content-length']);
-
-    } catch (e) {
-        console.log("[Anyrouter-Fix] JSON 解析或强修失败: " + e);
+  // 1. 替换模型名
+  if (body.model) {
+    if (body.model.toLowerCase().includes("opus")) {
+      body.model = "opus[1m]";
+    } else if (body.model.toLowerCase().includes("sonnet")) {
+      body.model = "sonnet[1m]";
+    } else if (body.model.toLowerCase().includes("haiku")) {
+      body.model = "haiku[1m]";
     }
-}
+  }
 
-$done({ headers, body });
+  // 2. 注入 Claude Code attribution block 到 system
+  const attribution = {
+    type: "text",
+    text: "<claude_code_attribution>\n<version>2.1.0</version>\n<client>cli</client>\n<fingerprint>a1b2c3d4</fingerprint>\n</claude_code_attribution>"
+  };
+
+  if (!body.system) {
+    body.system = [attribution];
+  } else if (Array.isArray(body.system)) {
+    body.system.unshift(attribution);
+  } else if (typeof body.system === "string") {
+    // 有些客户端 system 是字符串，转成数组格式
+    body.system = [attribution, { type: "text", text: body.system }];
+  }
+
+  // 3. 修改 headers
+  const headers = ctx.request.headers;
+  headers.set("User-Agent", "claude-cli/2.1.0 (external, cli)");
+  headers.set("anthropic-version", "2023-06-01");
+  // 把 Authorization: Bearer sk-xxx 转成 x-api-key: sk-xxx
+  const auth = headers.get("Authorization") || headers.get("authorization");
+  if (auth && auth.startsWith("Bearer ")) {
+    headers.set("x-api-key", auth.replace("Bearer ", ""));
+    headers.delete("Authorization");
+  }
+
+  return {
+    headers: headers,
+    body: body  // Object 会自动序列化为 JSON
+  };
+}
