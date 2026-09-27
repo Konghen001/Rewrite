@@ -8,7 +8,7 @@ https://t.me/ddgksf2021
 
 [rewrite_local]
 
-/api/v2/myinfo/8 url script-response-body https://ddgksf2013.top/scripts/shanqiu.vip.js
+/api/v2/myinfo/8 url script-response-body https://raw.githubusercontent.com/Konghen001/Rewrite/refs/heads/main/shanqiu.js
 
 
 ***********************************/
