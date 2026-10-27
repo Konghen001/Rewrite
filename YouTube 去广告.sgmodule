@@ -1,0 +1,98 @@
+name: YouTube Enhance
+description: |-
+  Block ads. Enable background play, PiP, up to 4x speed and On-the-go controls.
+  Based on Maasea's code (Apache-2.0).
+compat_arguments:
+  block_upload: 'true'
+  block_shorts: 'false'
+  auto_hd: 'true'
+  block_games: 'true'
+  block_vertical_live: 'false'
+  jump_ahead: 'true'
+  block_store: 'true'
+  block_ai: 'true'
+  on_the_go: 'true'
+compat_arguments_desc: |-
+  block_upload
+    └ Remove upload tab
+  block_shorts
+    └ Remove Shorts tab
+  auto_hd
+    └ Prefer highest offered resolution; Premium bitrate when authorized
+  block_games
+    └ Remove Playables on homepage
+  block_vertical_live
+    └ Remove Vertical live on homepage
+  jump_ahead
+    └  Enable Jump Ahead button
+  block_store
+    └  Remove creator stores, product cards and overlays
+  block_ai
+    └ Remove Ask, AI summaries and related controls
+  on_the_go
+    └ On-the-go controls when compatible UI components are available
+dns: {}
+url_rewrites:
+- match: ^https:\/\/www\.youtube\.com\/(pagead|pcs)\/
+  location: http://reject/
+  status_code: 307
+- match: ^https:\/\/s\.youtube\.com\/api\/stats\/ads
+  location: http://reject/
+  status_code: 307
+scriptings:
+- http_request:
+    name: youtube.enhance.ad-break
+    match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/player\/ad_break(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/request.js
+- http_response:
+    name: youtube.enhance.response
+    match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(?:navigation\/resolve_url|browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch)(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/response.js
+    env:
+      _compat.$argument: '{"blockUpload":true,"blockShorts":true,"blockGames":true,"blockVerticalLive":false,"jumpAhead":true,"autoHd":false,"blockStore":true,"blockAi":false,"onTheGo":true}'
+    max_size: -1
+    body_required: true
+    binary_body: true
+- http_response:
+    name: youtube.enhance.key
+    match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(?:config|log_event)(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/key.js
+    max_size: -1
+    body_required: true
+    binary_body: true
+- http_response:
+    name: youtube.enhance.ump
+    match: ^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/ump.js
+    env:
+      _compat.$argument: '{"blockGames":true,"blockVerticalLive":false,"jumpAhead":true,"autoHd":false,"blockStore":true,"blockAi":false,"onTheGo":true}'
+    max_size: -1
+    body_required: true
+    binary_body: true
+- http_request:
+    name: youtube.enhance.init
+    match: ^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/request.js
+    env:
+      _compat.$argument: '{"autoHd":false}'
+    max_size: -1
+    body_required: true
+    binary_body: true
+- http_request:
+    name: youtube.enhance.auto-hd
+    match: ^https?:\/\/[\w-]+\.googlevideo\.com\/videoplayback(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/request.js
+    env:
+      _compat.$argument: '{"autoHd":false}'
+    max_size: -1
+    body_required: true
+    binary_body: true
+- http_request:
+    name: youtube.enhance.log-event
+    match: ^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/log_event(?:\?.*)?$
+    script_url: https://raw.githubusercontent.com/gholts/surge/main/scripts/youtube/request.js
+mitm:
+  hostnames:
+    includes:
+    - '*.googlevideo.com'
+    - youtubei.googleapis.com
