@@ -32,6 +32,23 @@ compat_arguments_desc: |-
   on_the_go
     └ On-the-go controls when compatible UI components are available
 dns: {}
+
+rules:
+- and:
+    match:
+    - domain_suffix:
+        match: googlevideo.com
+    - protocol:
+        match: UDP
+    policy: REJECT
+- and:
+    match:
+    - domain:
+        match: youtubei.googleapis.com
+    - protocol:
+        match: UDP
+    policy: REJECT
+
 url_rewrites:
 - match: ^https:\/\/www\.youtube\.com\/(pagead|pcs)\/
   location: http://reject/
