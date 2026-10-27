@@ -113,3 +113,5 @@ mitm:
     includes:
     - '*.googlevideo.com'
     - youtubei.googleapis.com
+    excludes:
+    - redirector*.googlevideo.com
