@@ -5,12 +5,12 @@ description: |-
 compat_arguments:
   block_upload: 'true'
   block_shorts: 'false'
-  auto_hd: 'true'
+  auto_hd: 'false'
   block_games: 'true'
   block_vertical_live: 'false'
   jump_ahead: 'true'
   block_store: 'true'
-  block_ai: 'true'
+  block_ai: 'false'
   on_the_go: 'true'
 compat_arguments_desc: |-
   block_upload
@@ -32,7 +32,6 @@ compat_arguments_desc: |-
   on_the_go
     └ On-the-go controls when compatible UI components are available
 dns: {}
-
 rules:
 - and:
     match:
@@ -48,7 +47,6 @@ rules:
     - protocol:
         match: UDP
     policy: REJECT
-
 url_rewrites:
 - match: ^https:\/\/www\.youtube\.com\/(pagead|pcs)\/
   location: http://reject/
